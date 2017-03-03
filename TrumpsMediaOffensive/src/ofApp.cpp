@@ -8,16 +8,40 @@ void ofApp::setup(){
 	gameEnd = false;
 	incrementBombs = 0;
 	for (int i = 0; i < 10; i++) {
-		bombs[i] = Bomb(ofRandom(0, 1200), ofRandom(0, 640));
+		bombs[i] = Bomb(ofRandom(0, 400), ofRandom(0, 500));
+		bombs1[i] = Bomb(ofRandom(0, 400), ofRandom(0, 500));
+		bombs2[i] = Bomb(ofRandom(0, 400), ofRandom(0, 500));
+		bombs3[i] = Bomb(ofRandom(0, 400), ofRandom(0, 500));
 	}
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-	gameEnd = thePlayer.isHitByBomb(theBomb.getBombX(), theBomb.getBombY(), theBomb.getBombWidth());
-	theBomb.exploding(theBomb.falling());
-	gameEnd = thePlayer.isHitByBomb(bombs[incrementBombs].getBombX(), bombs[incrementBombs].getBombY(), bombs[incrementBombs].getBombWidth());
+	if (incrementBombs == 9) {
+		incrementBombs = 0;
+		for (int i = 0; i < 10; i++) {
+			bombs[i] = Bomb(ofRandom(0, 400), ofRandom(0, 500));
+			bombs1[i] = Bomb(ofRandom(0, 400), ofRandom(0, 500));
+			bombs2[i] = Bomb(ofRandom(0, 400), ofRandom(0, 500));
+			bombs3[i] = Bomb(ofRandom(0, 400), ofRandom(0, 500));
+			bombs[i].setFalling();
+			bombs1[i].setFalling();
+			bombs2[i].setFalling();
+			bombs3[i].setFalling();
+		}
+	}
+	gameEnd = thePlayer.isHitByBomb(bombs[incrementBombs].getBombX(), bombs[incrementBombs].getBombY(), 
+		bombs[incrementBombs].getBombWidth(), bombs[incrementBombs].isItExploding());
+	gameEnd = thePlayer.isHitByBomb(bombs1[incrementBombs].getBombX(), bombs1[incrementBombs].getBombY(), 
+		bombs1[incrementBombs].getBombWidth(), bombs1[incrementBombs].isItExploding());
+	gameEnd = thePlayer.isHitByBomb(bombs2[incrementBombs].getBombX(), bombs2[incrementBombs].getBombY(), 
+		bombs2[incrementBombs].getBombWidth(), bombs2[incrementBombs].isItExploding());
+	gameEnd = thePlayer.isHitByBomb(bombs3[incrementBombs].getBombX(), bombs3[incrementBombs].getBombY(), 
+		bombs3[incrementBombs].getBombWidth(), bombs3[incrementBombs].isItExploding());
 	bombs[incrementBombs].exploding(bombs[incrementBombs].falling());
+	bombs1[incrementBombs].exploding(bombs1[incrementBombs].falling());
+	bombs2[incrementBombs].exploding(bombs2[incrementBombs].falling());
+	bombs3[incrementBombs].exploding(bombs3[incrementBombs].falling());
 	if (bombs[incrementBombs].getBombX() == 5000) {
 		incrementBombs = incrementBombs + 1;
 	}
@@ -27,8 +51,10 @@ void ofApp::update(){
 void ofApp::draw(){
 	if (gameEnd == false) {
 		thePlayer.draw();
-		theBomb.draw();
 		bombs[incrementBombs].draw();
+		bombs1[incrementBombs].draw();
+		bombs2[incrementBombs].draw();
+		bombs3[incrementBombs].draw();
 	}
 	else if (gameEnd == true) {
 		ofSetColor(0, 0, 0);
@@ -145,11 +171,11 @@ void ofApp::Player::setPlayerY(float y) {
 }
 
 //Tell's whether or not the player is hit by a bomb
-bool ofApp::Player::isHitByBomb(float x, float y, float width) {
+bool ofApp::Player::isHitByBomb(float x, float y, float width, bool b) {
 	xDif = playerX - x;
 	yDif = playerY - y;
 	distanceSquared = xDif * xDif + yDif * yDif;
-	if (distanceSquared < (playerWidth + width) * (playerWidth + width)) {
+	if ((distanceSquared < (playerWidth + width) * (playerWidth + width)) && b == true) {
 		hit = true;
 		//cout << "true";
 	}
@@ -167,6 +193,7 @@ ofApp::Bomb::Bomb(float x, float y) {
 	bombWidth = 30;
 	isFalling = true;
 	isExploding = false;
+	explosionSize = 30 + floor(ofRandom(0, 70));
 }
 
 //No argument constructor
@@ -218,7 +245,7 @@ void ofApp::Bomb::setBombWidth(float width) {
 //Animates the bomb falling from the sky
 bool ofApp::Bomb::falling() {
 	if (isFalling == true) {
-		bombWidth = bombWidth - 0.5;
+		bombWidth = bombWidth - 1;
 	}
 	if (bombWidth == 1) {
 		isFalling = false;
@@ -230,11 +257,22 @@ bool ofApp::Bomb::falling() {
 void ofApp::Bomb::exploding(bool fall) {
 	if (fall == false) {
 		isExploding = true;
-		bombWidth = bombWidth + .5;
+		bombWidth = bombWidth + 1;
 	}
-	if (isExploding == true && bombWidth == 50) {
+	if (isExploding == true && bombWidth == explosionSize) {
 		bombX = 5000;
 	}
+}
+
+bool ofApp::Bomb::isItExploding() {
+	return isExploding;
+}
+
+void ofApp::Bomb::setFalling() {
+	isFalling = true;
+	isExploding = false;
+	bombWidth = 30;
+	ofSetColor(0, 0, 0);
 }
 
 //------------------------------------------End Bomb Class Methods-------------------------------------------------------
