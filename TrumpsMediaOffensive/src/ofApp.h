@@ -1,3 +1,10 @@
+//Made by Brad Tully
+//10 March 2017
+//Intro to Game Design
+//Final Project: In this game the player is a reporter that chose to write a negative story about Trump and
+//gets sucked into Trump's dream that night where he dreams about dropping bombs on them the player uses
+//WASD to avoid the exploding bombs for as long as possible
+
 #pragma once
 
 #include "ofMain.h"
@@ -32,8 +39,10 @@ class ofApp : public ofBaseApp{
 			void draw();
 			float getPlayerX();
 			float getPlayerY();
+			float getPlayerWidth();
 			void setPlayerX(float x);
 			void setPlayerY(float y);
+			void setHit(bool h);
 			bool isHitByBomb(float x, float y, float width, bool b);
 		};
 		//---------------------------------End Player Class---------------------------------------------
@@ -59,13 +68,22 @@ class ofApp : public ofBaseApp{
 		};
 		//---------------------------------End Bomb Class-----------------------------------------------
 		
-
-
-		Player thePlayer = Player(200, 250);
+		//Initialize some variables and arrays of bombs to have multiple exploding at once
+		int screenX = 400;
+		int screenY = 500;
+		int score = 0;
+		Player thePlayer = Player(screenX / 2, screenY / 2);
 		Bomb bombs[10];
 		Bomb bombs1[10];
 		Bomb bombs2[10];
 		Bomb bombs3[10];
+		Bomb bombs4[10];
+		Bomb bombs5[10];
+		Bomb bombs6[10];
+		Bomb bombs7[10];
+		Bomb bombs8[10];
+		Bomb bombs9[10];
+		Bomb bombs10[10];
 		int incrementBombs;
-		bool gameEnd;
+		bool gameEnd, gameStart;
 };
