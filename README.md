@@ -4,3 +4,16 @@ This is a simple endless survival game made using openFrameworks and C++. The ba
 
 # Start Screen
 
+![alt tag](https://github.com/BradTu/GameDesignFinal/blob/master/StartScreen.JPG)
+
+# Lose Screen
+
+![alt tag](https://github.com/BradTu/GameDesignFinal/blob/master/LoseScreen.JPG)
+
+# Falling Bombs
+
+![alt tag](https://github.com/BradTu/GameDesignFinal/blob/master/FallingBombs.JPG)
+
+# Exploding Bombs
+
+![alt tag](https://github.com/BradTu/GameDesignFinal/blob/master/ExplodingBombs.JPG)
